@@ -21,14 +21,16 @@ WORKDIR /opt
 ARG BRANCH=v2.2.2
 ARG URL=https://github.com/digitalocean/netbox/archive/$BRANCH.tar.gz
 RUN wget -q -O - "${URL}" | tar xz \
-  && ln -s netbox* netbox
+  && mv netbox* netbox
 
 WORKDIR /opt/netbox
 RUN pip install -r requirements.txt
 
-COPY docker/configuration.docker.py /opt/netbox/netbox/netbox/configuration.py
+COPY docker/configuration.py /opt/netbox/netbox/netbox/configuration.py
 COPY docker/gunicorn_config.py /opt/netbox/
 COPY docker/nginx.conf /etc/netbox-nginx/nginx.conf
+
+WORKDIR /opt/netbox/netbox
 
 COPY docker/docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
