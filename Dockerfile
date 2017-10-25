@@ -14,7 +14,7 @@ RUN apk add --no-cache \
       openssl-dev \
       postgresql-dev \
       wget \
-  && pip install gunicorn==17.5 django-auth-ldap
+  && pip --no-cache-dir install gunicorn==17.5 django-auth-ldap
 
 WORKDIR /opt
 
@@ -24,7 +24,7 @@ RUN wget -q -O - "${URL}" | tar xz \
   && mv netbox* netbox
 
 WORKDIR /opt/netbox
-RUN pip install -r requirements.txt
+RUN pip --no-cache-dir install -r requirements.txt
 
 COPY docker/configuration.py /opt/netbox/netbox/netbox/configuration.py
 COPY docker/gunicorn_config.py /opt/netbox/
